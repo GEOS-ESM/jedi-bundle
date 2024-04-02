@@ -42,6 +42,10 @@ def determine_platform(logger):
         # List of commands to check if this is the platform
         is_it_me = platform_dict['is_it_me']
 
+        # Flag to indicate whether to skip to the next platform, otherwise it
+        # is stuck at the last platform in the possible_platforms list
+        skip_to_next_platform = False
+
         # Loop over commands
         for is_it_me_command in is_it_me:
 
@@ -52,7 +56,12 @@ def determine_platform(logger):
 
             # If command_out is not in command_out_actual go to next platform
             if is_it_me_command['contains'] not in command_out.stdout:
+                skip_to_next_platform = True
                 break
+
+        # If the flag is set, skip to the next platform
+        if skip_to_next_platform:
+            continue
 
         # If we made it here all commands were successful for this platform
         return platform_dict['platform_name'], platform_dict['modules']['default_modules']
