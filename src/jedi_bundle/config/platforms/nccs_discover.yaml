@@ -5,7 +5,7 @@ is_it_me:
   - command: 'cat /etc/os-release | grep VERSION='
     contains: '12-'
 crtm_coeffs_path: '/discover/nobackup/projects/gmao/advda/SwellStaticFiles/jedi/crtm_coefficients/'
-crtm_coeffs_version: '2.4.0_skylab_3.0'
+crtm_coeffs_version: '2.4.1_skylab_4.0'
 modules:
   default_modules: intel
   intel:
