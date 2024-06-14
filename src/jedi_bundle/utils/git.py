@@ -68,25 +68,27 @@ def repo_is_reachable(logger, url, username, token):
 
 def repo_has_branch(logger, url, branch, is_tag=False, is_commit=False):
 
-    # Command to check if branch exists and pass exit code back
-    heads_or_tags = '--heads'
-    if is_tag:
-        heads_or_tags = '--tags'
-
-    git_ls_cmd = ['git', 'ls-remote', heads_or_tags, '--exit-code', url, branch]
-
-    # Check if commit exists
     if is_commit:
+        # Cannot check for a commit before cloning
         return True
 
-    # Run command
-    process = subprocess.run(git_ls_cmd, stdout=devnull)
-
-    # Return flag based on exit code.
-    if process.returncode == 0:
-        return True
     else:
-        return False
+
+        # Command to check if branch exists and pass exit code back
+        heads_or_tags = '--heads'
+        if is_tag:
+            heads_or_tags = '--tags'
+
+        git_ls_cmd = ['git', 'ls-remote', heads_or_tags, '--exit-code', url, branch]
+
+        # Run command
+        process = subprocess.run(git_ls_cmd, stdout=devnull)
+
+        # Return flag based on exit code.
+        if process.returncode == 0:
+            return True
+        else:
+            return False
 
 
 # --------------------------------------------------------------------------------------------------
@@ -156,6 +158,9 @@ def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
     elif is_tag:
 
         logger.info(f'Repo {url}, tag already cloned, skipping...')
+
+    elif is_commit:
+        logger.info(f'Repo {url}, commit hash already cloned, skipping...')
 
     else:
 
