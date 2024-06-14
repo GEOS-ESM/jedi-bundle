@@ -170,10 +170,10 @@ def clone_jedi(logger, clone_config):
                 if 'commit' in pinned_repo_dict[repo]:
                     is_commit_in = pinned_repo_dict[repo]['commit']
 
-        found, url, branch,
-        is_tag, is_commit = get_url_and_branch(logger, github_orgs, repo_url_name,
-                                               default_branch, user_branch, is_tag_in,
-                                               is_commit_in)
+        found, url, branch, is_tag, is_commit = get_url_and_branch(logger, github_orgs,
+                                                                   repo_url_name, default_branch,
+                                                                   user_branch, is_tag_in,
+                                                                   is_commit_in)
         if found:
 
             # List for writing CMakeLists.txt

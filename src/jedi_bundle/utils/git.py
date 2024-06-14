@@ -12,6 +12,7 @@
 import os
 import requests
 import subprocess
+import shutil
 
 from jedi_bundle.utils.config import config_get
 from jedi_bundle.utils.file_system import devnull, subprocess_run
@@ -69,11 +70,9 @@ def repo_is_reachable(logger, url, username, token):
 def repo_has_branch(logger, url, branch, is_tag=False, is_commit=False):
 
     if is_commit:
-        # Cannot check for a commit before cloning
+        # Cannot check for a commit before cloning, check after cloning
         return True
-
     else:
-
         # Command to check if branch exists and pass exit code back
         heads_or_tags = '--heads'
         if is_tag:
@@ -149,11 +148,31 @@ def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
     # Check if directory already exists
     if not os.path.exists(target):
 
-        # Command to check if branch exists and pass exit code back
-        git_clone_cmd = ['git', 'clone', '--recursive', '-b', branch, url, target]
+        if is_commit:
+            # Clone repo
+            git_clone_cmd = ['git', 'clone', url, target]
+            subprocess_run(logger, git_clone_cmd, True)
+            os.chdir(target)
+            # Run check for commit
+            try:
+                git_check_cmd = ['git', 'cat-file', '-t', branch]
+                commit_valid = subprocess.check_output(git_check_cmd)
+                if 'commit' in str(commit_valid, 'utf-8'):
+                    git_clone_cmd = ['git', 'checkout', branch]
+                    subprocess_run(logger, git_clone_cmd, True)
+                    os.chdir('../')
+            except Exception:
+                os.chdir('../')
+                shutil.rmtree(target)
+                print(f'Commit hash {branch} not found at {url}.')
+                raise
 
-        # Run command
-        subprocess_run(logger, git_clone_cmd, True)
+        else:
+            # Command to check if branch exists and pass exit code back
+            git_clone_cmd = ['git', 'clone', '--recursive', '-b', branch, url, target]
+
+            # Run command
+            subprocess_run(logger, git_clone_cmd, True)
 
     elif is_tag:
 
