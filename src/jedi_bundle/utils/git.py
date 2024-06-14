@@ -66,7 +66,7 @@ def repo_is_reachable(logger, url, username, token):
 # --------------------------------------------------------------------------------------------------
 
 
-def repo_has_branch(logger, url, branch, is_tag=False):
+def repo_has_branch(logger, url, branch, is_tag=False, is_commit=False):
 
     # Command to check if branch exists and pass exit code back
     heads_or_tags = '--heads'
@@ -74,6 +74,10 @@ def repo_has_branch(logger, url, branch, is_tag=False):
         heads_or_tags = '--tags'
 
     git_ls_cmd = ['git', 'ls-remote', heads_or_tags, '--exit-code', url, branch]
+
+    # Check if commit exists
+    if is_commit:
+        return True
 
     # Run command
     process = subprocess.run(git_ls_cmd, stdout=devnull)
@@ -88,7 +92,8 @@ def repo_has_branch(logger, url, branch, is_tag=False):
 # --------------------------------------------------------------------------------------------------
 
 
-def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch, user_branch, is_tag_in):
+def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch,
+                       user_branch, is_tag_in, is_commit_in):
 
     # Get GitHub username and token if .git-credentials file available
     username, token = get_github_username_token(logger)
@@ -101,6 +106,7 @@ def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch, user_
     repo_url_to_use = ''
     repo_branch_to_use = ''
     is_tag = False
+    is_commit = False
     for github_org in github_orgs:
 
         # Full path of the repo url
@@ -122,20 +128,21 @@ def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch, user_
             # Track first instance of finding the default branch. But do not exit when it's first
             # found so that other organizations can be checked for the user branch.
             if not found_default_branch:
-                if repo_has_branch(logger, github_url, default_branch, is_tag_in):
+                if repo_has_branch(logger, github_url, default_branch, is_tag_in, is_commit_in):
                     found_default_branch = True
                     repo_url_found = True
                     repo_url_to_use = github_url
                     repo_branch_to_use = default_branch
                     is_tag = is_tag_in
+                    is_commit = is_commit_in
 
-    return repo_url_found, repo_url_to_use, repo_branch_to_use, is_tag
+    return repo_url_found, repo_url_to_use, repo_branch_to_use, is_tag, is_commit
 
 
 # --------------------------------------------------------------------------------------------------
 
 
-def clone_git_repo(logger, url, branch, target, is_tag):
+def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
 
     # Check if directory already exists
     if not os.path.exists(target):

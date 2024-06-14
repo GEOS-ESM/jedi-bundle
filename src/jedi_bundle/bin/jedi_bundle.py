@@ -72,8 +72,12 @@ def execute_tasks(tasks, config_dict):
     configure_dict = {**clone_dict, **config_dict['configure_options']}
     make_dict = {**configure_dict, **config_dict['make_options']}
 
+    
+
     # Run the build stages
     if 'all' in tasks or 'clone' in tasks:
+        if 'pinned_versions' in config_dict:
+            clone_dict['pinned_versions'] = config_dict['pinned_versions']
         clone_jedi(logger, clone_dict)
     if 'all' in tasks or 'configure' in tasks:
         configure_jedi(logger, configure_dict)
@@ -105,6 +109,9 @@ def jedi_bundle():
                              '  jedi_bundle all build.yaml              (All tasks) \n' +
                              '  jedi_bundle Clone build.yaml            (Clone task) \n'
                              '  jedi_bundle Clone Configure build.yaml  (Clone & Configure task)\n')
+    parser.add_argument('--pinned_versions', type=str, required=False,
+                        help='Enter the path to a yaml file with pinned versions of JEDI repos. '
+                             'This is to be used with the Clone step.')
 
     # Write the welcome message
     write_welcome_message()
@@ -115,6 +122,7 @@ def jedi_bundle():
     # Parse input string
     args = parser.parse_args()
     tasks_and_config = args.tasks_and_config
+    pinned_versions_yaml = args.pinned_versions
 
     # If there are no arguments create build.yaml and exit
     if tasks_and_config == []:
@@ -177,6 +185,12 @@ def jedi_bundle():
         # Read the config
         # ---------------
         config_dict = load_yaml(logger, config_file_name)
+
+        # If pinned_versions exists, concatenate with config_dict
+        # -------------------------------------------------------
+        if pinned_versions_yaml:
+            pinned_versions_dict = load_yaml(logger, pinned_versions_yaml)        
+            config_dict['pinned_versions'] = pinned_versions_dict
 
         # Execute the tasks
         # -----------------
