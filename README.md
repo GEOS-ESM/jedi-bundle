@@ -5,6 +5,7 @@
 | Test      | Status  |
 | --------- | --------|
 | Clone a JEDI bundle test | ![Status](https://github.com/GEOS-ESM/jedi_bundle/actions/workflows/clone_a_jedi_bundle.yml/badge.svg) |
+| Clone with pinned version test | ![Status](https://github.com/GEOS-ESM/jedi_bundle/actions/workflows/clone_with_pinned_version.yml/badge.svg) |
 | Python coding norms | ![Status](https://github.com/GEOS-ESM/jedi_bundle/actions/workflows/python_coding_norms.yml/badge.svg) |
 | YAML coding norms | ![Status](https://github.com/GEOS-ESM/jedi_bundle/actions/workflows/yaml_coding_norms.yml/badge.svg) |
 
