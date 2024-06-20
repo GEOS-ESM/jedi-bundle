@@ -248,6 +248,10 @@ def clone_jedi(logger, clone_config):
     url_len = len(max(url_list, key=len))+2  # Plus 2 because of the quotes
     branch_len = len(max(branch_list, key=len))
 
+    # Debug: double checking current path
+    print('current path: ', os.path.abspath(os.curdir))
+    print('output file: ', output_file)
+
     with open(output_file, 'w') as output_file_open:
         for cmake_header_line in cmake_header_lines:
             output_file_open.write(cmake_header_line + '\n')
