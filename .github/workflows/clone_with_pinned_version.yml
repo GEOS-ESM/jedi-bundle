@@ -1,4 +1,4 @@
-name: JEDI Bundle Clone Test
+name: JEDI Bundle Pinned Version Clone Test
 
 on:
   pull_request:
