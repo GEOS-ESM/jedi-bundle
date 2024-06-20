@@ -42,7 +42,7 @@ jobs:
 
     # Run an application test
     - name: Run JEDI Bundle application test
-      run: jedi_bundle Clone src/jedi_bundle/config/build.yaml
+      run: jedi_bundle --pinned_versions src/jedi_bundle/config/test_pinned_versions.yaml Clone src/jedi_bundle/config/build.yaml
 
     # Confirm existence of expected file
     - name: Check
