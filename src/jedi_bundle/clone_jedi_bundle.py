@@ -170,10 +170,10 @@ def clone_jedi(logger, clone_config):
                 if 'commit' in pinned_repo_dict[repo]:
                     is_commit_in = pinned_repo_dict[repo]['commit']
 
-        found, url, branch, is_tag, is_commit = get_url_and_branch(logger, github_orgs,
-                                                                   repo_url_name, default_branch,
-                                                                   user_branch, is_tag_in,
-                                                                   is_commit_in)
+        found, url, branch, \
+            is_tag, is_commit = get_url_and_branch(logger, github_orgs, repo_url_name,
+                                                   default_branch, user_branch,
+                                                   is_tag_in, is_commit_in)
         if found:
 
             # List for writing CMakeLists.txt
@@ -248,20 +248,13 @@ def clone_jedi(logger, clone_config):
     url_len = len(max(url_list, key=len))+2  # Plus 2 because of the quotes
     branch_len = len(max(branch_list, key=len))
 
-    # Debug: double checking current path
-    print('current path: ', os.path.abspath(os.curdir))
-    print('output file: ', output_file)
-
     with open(output_file, 'w') as output_file_open:
         for cmake_header_line in cmake_header_lines:
             output_file_open.write(cmake_header_line + '\n')
 
-        for repo, url, branch, cmake, recursive, is_tag, is_commit in zip(repo_list, url_list,
-                                                                          branch_list,
-                                                                          cmakelists_list,
-                                                                          recursive_list,
-                                                                          is_tag_list,
-                                                                          is_commit_list):
+        for repo, url, branch, cmake, recursive, \
+            is_tag, is_commit in zip(repo_list, url_list, branch_list, cmakelists_list,
+                                     recursive_list, is_tag_list, is_commit_list):
             urlq = f'\"{url}\"'
 
             # Default cloning options
