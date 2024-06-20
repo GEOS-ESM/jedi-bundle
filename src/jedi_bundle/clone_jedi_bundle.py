@@ -157,18 +157,16 @@ def clone_jedi(logger, clone_config):
         is_commit_in = config_get(logger, repo_dict, 'commit', False)
 
         # Extract information from pinned_versions if applicable
-        pinned_repo_dict = None
         if pinned_versions:
             for d in pinned_versions:
                 if repo in d:
-                    pinned_repo_dict = d
-            if pinned_repo_dict:
-                if 'branch' in pinned_repo_dict[repo]:
-                    default_branch = pinned_repo_dict[repo]['branch']
-                if 'tag' in pinned_repo_dict[repo]:
-                    is_tag_in = pinned_repo_dict[repo]['tag']
-                if 'commit' in pinned_repo_dict[repo]:
-                    is_commit_in = pinned_repo_dict[repo]['commit']
+                    if 'branch' in d[repo]:
+                        default_branch = d[repo]['branch']
+                    if 'tag' in d[repo]:
+                        is_tag_in = d[repo]['tag']
+                    if 'commit' in d[repo]:
+                        is_commit_in = d[repo]['commit']
+                    break
 
         found, url, branch, \
             is_tag, is_commit = get_url_and_branch(logger, github_orgs, repo_url_name,
