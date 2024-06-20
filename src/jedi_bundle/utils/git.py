@@ -152,6 +152,8 @@ def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
             # Clone repo
             git_clone_cmd = ['git', 'clone', url, target]
             subprocess_run(logger, git_clone_cmd, True)
+            # Save current directory
+            parent_dir = os.path.abspath(os.curdir)            
             os.chdir(target)
             # Run check for commit
             try:
@@ -160,7 +162,8 @@ def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
                 if 'commit' in str(commit_valid, 'utf-8'):
                     git_clone_cmd = ['git', 'checkout', branch]
                     subprocess_run(logger, git_clone_cmd, True)
-                    os.chdir('../')
+                    #os.chdir('../')
+                    os.chdir(parent_dir)
             except Exception:
                 os.chdir('../')
                 shutil.rmtree(target)
