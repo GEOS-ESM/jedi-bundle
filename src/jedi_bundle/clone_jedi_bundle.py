@@ -248,11 +248,7 @@ def clone_jedi(logger, clone_config):
     url_len = len(max(url_list, key=len))+2  # Plus 2 because of the quotes
     branch_len = len(max(branch_list, key=len))
 
-    # Remove file if it exists
-    if os.path.exists(output_file):
-        os.remove(output_file)
-
-    with open(output_file, 'a') as output_file_open:
+    with open(output_file, 'w') as output_file_open:
         for cmake_header_line in cmake_header_lines:
             output_file_open.write(cmake_header_line + '\n')
 
