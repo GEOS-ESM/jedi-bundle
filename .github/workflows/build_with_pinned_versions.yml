@@ -38,4 +38,4 @@ jobs:
 
     # Check if build.yaml has pinned_versions
     - name: Check for pinned_versions
-      run: python jedi_bundle/src/jedi_bundle/tests/check_build_yaml.py ${GITHUB_WORKSPACE}/build.yaml
+      run: python src/jedi_bundle/tests/check_build_yaml.py ${GITHUB_WORKSPACE}/build.yaml
