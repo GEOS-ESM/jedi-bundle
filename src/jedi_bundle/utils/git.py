@@ -12,7 +12,6 @@
 import os
 import requests
 import subprocess
-import shutil
 
 from jedi_bundle.utils.config import config_get
 from jedi_bundle.utils.file_system import devnull, subprocess_run
@@ -72,6 +71,10 @@ def repo_has_branch(logger, url, branch, is_tag=False, is_commit=False):
     if is_commit:
         commit_url = url + '/commits/' + branch
         r = requests.get(commit_url)
+        if r.ok:
+            logger.info(f'Found commit at {commit_url}')
+        else:
+            logger.info(f'Cannot find commit at {commit_url}')
         return r.ok
 
     else:
