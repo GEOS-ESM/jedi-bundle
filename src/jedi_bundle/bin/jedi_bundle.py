@@ -107,8 +107,8 @@ def jedi_bundle():
                              '  jedi_bundle all build.yaml              (All tasks) \n' +
                              '  jedi_bundle Clone build.yaml            (Clone task) \n'
                              '  jedi_bundle Clone Configure build.yaml  (Clone & Configure task)\n')
-    parser.add_argument('--pinned_versions', type=str, required=False,
-                        help='Enter the path to a yaml file with pinned versions of JEDI repos. ')
+    parser.add_argument('--pinned_versions', '-pv', action='store_true',
+                        help='Invoke flag to use pinned versions instead of defaults')
 
     # Write the welcome message
     write_welcome_message()
@@ -119,7 +119,7 @@ def jedi_bundle():
     # Parse input string
     args = parser.parse_args()
     tasks_and_config = args.tasks_and_config
-    pinned_versions_yaml = args.pinned_versions
+    pinned_versions = args.pinned_versions
 
     # If there are no arguments create build.yaml and exit
     if tasks_and_config == []:
@@ -159,8 +159,9 @@ def jedi_bundle():
         internal_config_dict['configure_options']['path_to_build'] = build_dir
 
         # Add pinned_versions to build config if applicable
-        if pinned_versions_yaml:
-            pinned_versions_dict = load_yaml(logger, pinned_versions_yaml)
+        if pinned_versions:
+            pinned_config_file = os.path.join(return_config_path(), 'pinned_versions.yaml')
+            pinned_versions_dict = load_yaml(logger, pinned_config_file)
             internal_config_dict['pinned_versions'] = pinned_versions_dict
 
         # Set path to new file and remove if existing
@@ -187,13 +188,6 @@ def jedi_bundle():
         # Read the config
         # ---------------
         config_dict = load_yaml(logger, config_file_name)
-
-        # If pinned_versions exists, concatenate with config_dict if not already there
-        # ----------------------------------------------------------------------------
-        if pinned_versions_yaml:
-            if 'pinned_versions' not in config_dict:
-                pinned_versions_dict = load_yaml(logger, pinned_versions_yaml)
-                config_dict['pinned_versions'] = pinned_versions_dict
 
         # Execute the tasks
         # -----------------

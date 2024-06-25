@@ -70,8 +70,10 @@ def repo_is_reachable(logger, url, username, token):
 def repo_has_branch(logger, url, branch, is_tag=False, is_commit=False):
 
     if is_commit:
-        # Cannot check for a commit before cloning, check after cloning
-        return True
+        commit_url = url + '/commits/' + branch
+        r = requests.get(commit_url)
+        return r.ok
+
     else:
         # Command to check if branch exists and pass exit code back
         heads_or_tags = '--heads'
@@ -149,24 +151,11 @@ def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
     if not os.path.exists(target):
 
         if is_commit:
-            # Clone repo
+
             git_clone_cmd = ['git', 'clone', url, target]
             subprocess_run(logger, git_clone_cmd, True)
-            parent_dir = os.path.abspath(os.curdir)
-            os.chdir(target)
-            # Run check for commit
-            try:
-                git_check_cmd = ['git', 'cat-file', '-t', branch]
-                commit_valid = subprocess.check_output(git_check_cmd)
-                if 'commit' in str(commit_valid, 'utf-8'):
-                    git_clone_cmd = ['git', 'checkout', branch]
-                    subprocess_run(logger, git_clone_cmd, True)
-                    os.chdir(parent_dir)
-            except Exception:
-                os.chdir('../')
-                shutil.rmtree(target)
-                print(f'Commit hash {branch} not found at {url}.')
-                raise
+            git_checkout_cmd = ['git', 'checkout', branch]
+            subprocess_run(logger, git_checkout_cmd, True, cwd=target)
 
         else:
             # Command to check if branch exists and pass exit code back

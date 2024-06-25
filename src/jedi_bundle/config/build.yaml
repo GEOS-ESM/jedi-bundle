@@ -7,6 +7,7 @@ clone_options:
     - GEOS-ESM
   bundles:
     - oops
+    - ufo
   extra_repos: []
   crtm_tag_or_branch: v2.4.1-jedi.1
 
