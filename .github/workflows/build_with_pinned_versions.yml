@@ -48,7 +48,7 @@ jobs:
 
     # Run an application test
     - name: Run JEDI Bundle application test
-      run: jedi_bundle -pv
+      run: jedi_bundle --pinned_versions
 
     # Confirm existence of expected file
     - name: Check
