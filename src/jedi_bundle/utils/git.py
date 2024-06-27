@@ -13,6 +13,7 @@ import os
 import requests
 import subprocess
 
+from jedi_bundle.utils.logger import Logger
 from jedi_bundle.utils.config import config_get
 from jedi_bundle.utils.file_system import devnull, subprocess_run
 
@@ -77,22 +78,17 @@ def repo_has_branch(logger, url, branch, is_tag=False, is_commit=False):
             logger.info(f'Cannot find commit at {commit_url}')
         return r.ok
 
-    else:
-        # Command to check if branch exists and pass exit code back
-        heads_or_tags = '--heads'
-        if is_tag:
-            heads_or_tags = '--tags'
+    # Command to check if branch exists and pass exit code back
+    heads_or_tags = '--heads'
+    if is_tag:
+        heads_or_tags = '--tags'
 
-        git_ls_cmd = ['git', 'ls-remote', heads_or_tags, '--exit-code', url, branch]
+    git_ls_cmd = ['git', 'ls-remote', heads_or_tags, '--exit-code', url, branch]
 
-        # Run command
-        process = subprocess.run(git_ls_cmd, stdout=devnull)
+    # Run command
+    process = subprocess.run(git_ls_cmd, stdout=devnull)
 
-        # Return flag based on exit code.
-        if process.returncode == 0:
-            return True
-        else:
-            return False
+    return process.returncode == 0
 
 
 # --------------------------------------------------------------------------------------------------

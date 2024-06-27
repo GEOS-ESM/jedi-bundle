@@ -63,13 +63,9 @@ def check_for_executable(logger, executable):
 # --------------------------------------------------------------------------------------------------
 
 
-def subprocess_run(logger, command, abort_on_fail=True, cwd=None):
+def subprocess_run(logger, command, abort_on_fail=True, **kwargs):
 
-    # Prepare command
-    if cwd:
-        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
-    else:
-        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, **kwargs)
 
     # Run process
     output, error = p.communicate()
