@@ -68,7 +68,13 @@ def repo_is_reachable(logger, url, username, token):
 # --------------------------------------------------------------------------------------------------
 
 
-def repo_has_branch(logger, url, branch, is_tag=False, is_commit=False):
+def repo_has_branch(
+    logger: Logger,
+    url: str,
+    branch: str,
+    is_tag: bool = False,
+    is_commit: bool = False
+) -> bool:
 
     if is_commit:
         commit_url = url + '/commits/' + branch
