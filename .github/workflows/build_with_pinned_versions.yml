@@ -1,4 +1,4 @@
-name: JEDI Bundle Clone Test
+name: JEDI Bundle Pinned Version Test
 
 on:
   pull_request:
@@ -7,16 +7,19 @@ on:
 
 jobs:
   buildbundle:
-    name: Clone oops bundle
+    name: Run jedi_bundle with pinned_versions
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
 
     steps:
 
     # Setup Python
-    - name: Set up Python 3.9
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: ${{ matrix.python-version }}
 
     # Clone the code repo
     - name: Clone code repo
@@ -24,7 +27,6 @@ jobs:
       with:
         lfs: true
 
-    # Install package
     - name: Install JEDI bundle and dependencies
       run: python -m pip install --use-deprecated=legacy-resolver -r requirements.txt --user .
     - name: Put executables in the path
@@ -32,8 +34,8 @@ jobs:
 
     # Run an application test
     - name: Run JEDI Bundle application test
-      run: jedi_bundle Clone src/jedi_bundle/config/build.yaml
+      run: jedi_bundle --pinned_versions
 
-    # Confirm existence of expected file
-    - name: Check
-      run: ls -l jedi_bundle/oops/CMakeLists.txt
+    # Check if build.yaml has pinned_versions
+    - name: Check for pinned_versions
+      run: python src/jedi_bundle/tests/test_pinned_versions.py ${GITHUB_WORKSPACE}/build.yaml

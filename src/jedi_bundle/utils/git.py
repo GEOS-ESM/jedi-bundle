@@ -13,6 +13,7 @@ import os
 import requests
 import subprocess
 
+from jedi_bundle.utils.logger import Logger
 from jedi_bundle.utils.config import config_get
 from jedi_bundle.utils.file_system import devnull, subprocess_run
 
@@ -66,7 +67,22 @@ def repo_is_reachable(logger, url, username, token):
 # --------------------------------------------------------------------------------------------------
 
 
-def repo_has_branch(logger, url, branch, is_tag=False):
+def repo_has_branch(
+    logger: Logger,
+    url: str,
+    branch: str,
+    is_tag: bool = False,
+    is_commit: bool = False
+) -> bool:
+
+    if is_commit:
+        commit_url = url + '/commits/' + branch
+        r = requests.get(commit_url)
+        if r.ok:
+            logger.info(f'Found commit at {commit_url}')
+        else:
+            logger.info(f'Cannot find commit at {commit_url}')
+        return r.ok
 
     # Command to check if branch exists and pass exit code back
     heads_or_tags = '--heads'
@@ -78,17 +94,14 @@ def repo_has_branch(logger, url, branch, is_tag=False):
     # Run command
     process = subprocess.run(git_ls_cmd, stdout=devnull)
 
-    # Return flag based on exit code.
-    if process.returncode == 0:
-        return True
-    else:
-        return False
+    return process.returncode == 0
 
 
 # --------------------------------------------------------------------------------------------------
 
 
-def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch, user_branch, is_tag_in):
+def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch,
+                       user_branch, is_tag_in, is_commit_in):
 
     # Get GitHub username and token if .git-credentials file available
     username, token = get_github_username_token(logger)
@@ -101,6 +114,7 @@ def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch, user_
     repo_url_to_use = ''
     repo_branch_to_use = ''
     is_tag = False
+    is_commit = False
     for github_org in github_orgs:
 
         # Full path of the repo url
@@ -122,33 +136,45 @@ def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch, user_
             # Track first instance of finding the default branch. But do not exit when it's first
             # found so that other organizations can be checked for the user branch.
             if not found_default_branch:
-                if repo_has_branch(logger, github_url, default_branch, is_tag_in):
+                if repo_has_branch(logger, github_url, default_branch, is_tag_in, is_commit_in):
                     found_default_branch = True
                     repo_url_found = True
                     repo_url_to_use = github_url
                     repo_branch_to_use = default_branch
                     is_tag = is_tag_in
+                    is_commit = is_commit_in
 
-    return repo_url_found, repo_url_to_use, repo_branch_to_use, is_tag
+    return repo_url_found, repo_url_to_use, repo_branch_to_use, is_tag, is_commit
 
 
 # --------------------------------------------------------------------------------------------------
 
 
-def clone_git_repo(logger, url, branch, target, is_tag):
+def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
 
     # Check if directory already exists
     if not os.path.exists(target):
 
-        # Command to check if branch exists and pass exit code back
-        git_clone_cmd = ['git', 'clone', '--recursive', '-b', branch, url, target]
+        if is_commit:
 
-        # Run command
-        subprocess_run(logger, git_clone_cmd, True)
+            git_clone_cmd = ['git', 'clone', url, target]
+            subprocess_run(logger, git_clone_cmd, True)
+            git_checkout_cmd = ['git', 'checkout', branch]
+            subprocess_run(logger, git_checkout_cmd, True, cwd=target)
+
+        else:
+            # Command to check if branch exists and pass exit code back
+            git_clone_cmd = ['git', 'clone', '--recursive', '-b', branch, url, target]
+
+            # Run command
+            subprocess_run(logger, git_clone_cmd, True)
 
     elif is_tag:
 
         logger.info(f'Repo {url}, tag already cloned, skipping...')
+
+    elif is_commit:
+        logger.info(f'Repo {url}, commit hash already cloned, skipping...')
 
     else:
 

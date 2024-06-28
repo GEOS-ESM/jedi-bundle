@@ -33,6 +33,10 @@ def clone_jedi(logger, clone_config):
     path_to_source = config_get(logger, clone_config, 'path_to_source')
     extra_repos = config_get(logger, clone_config, 'extra_repos')
     crtm_tag_or_branch = config_get(logger, clone_config, 'crtm_tag_or_branch', 'v2.4-jedi.2')
+    if 'pinned_versions' in clone_config:
+        pinned_versions = config_get(logger, clone_config, 'pinned_versions')
+    else:
+        pinned_versions = None
 
     # Check for needed executables
     # ----------------------------
@@ -135,6 +139,7 @@ def clone_jedi(logger, clone_config):
     cmakelists_list = []
     recursive_list = []
     is_tag_list = []
+    is_commit_list = []
 
     optional_repos_not_found = []
 
@@ -145,14 +150,28 @@ def clone_jedi(logger, clone_config):
         # Extract repo information
         repo_dict = build_order_dict[repo]
         repo_url_name = config_get(logger, repo_dict, 'repo_url_name', repo)
-        default_branch = config_get(logger, repo_dict, 'default_branch')
         cmakelists = config_get(logger, repo_dict, 'cmakelists', '')
         recursive = config_get(logger, repo_dict, 'recursive', False)
+        default_branch = config_get(logger, repo_dict, 'default_branch')
         is_tag_in = config_get(logger, repo_dict, 'tag', False)
+        is_commit_in = config_get(logger, repo_dict, 'commit', False)
 
-        found, url, branch, is_tag = get_url_and_branch(logger, github_orgs, repo_url_name,
-                                                        default_branch, user_branch, is_tag_in)
+        # Extract information from pinned_versions if applicable
+        if pinned_versions:
+            for d in pinned_versions:
+                if repo in d:
+                    if 'branch' in d[repo]:
+                        default_branch = d[repo]['branch']
+                    if 'tag' in d[repo]:
+                        is_tag_in = d[repo]['tag']
+                    if 'commit' in d[repo]:
+                        is_commit_in = d[repo]['commit']
+                    break
 
+        found, url, branch, \
+            is_tag, is_commit = get_url_and_branch(logger, github_orgs, repo_url_name,
+                                                   default_branch, user_branch,
+                                                   is_tag_in, is_commit_in)
         if found:
 
             # List for writing CMakeLists.txt
@@ -162,6 +181,7 @@ def clone_jedi(logger, clone_config):
             cmakelists_list.append(cmakelists)
             recursive_list.append(recursive)
             is_tag_list.append(is_tag)
+            is_commit_list.append(is_commit)
 
         else:
 
@@ -180,10 +200,13 @@ def clone_jedi(logger, clone_config):
     logger.info(f'Repository clone summary:')
     logger.info(f'-------------------------')
 
-    for repo, url, branch, is_tag in zip(repo_list, url_list, branch_list, is_tag_list):
+    for repo, url, branch, is_tag, is_commit in zip(repo_list, url_list, branch_list,
+                                                    is_tag_list, is_commit_list):
         branch_or_tag = 'Branch'
         if is_tag:
             branch_or_tag = 'Tag'
+        if is_commit:
+            branch_or_tag = 'Commit'
         logger.info(f'{branch_or_tag.ljust(6)} {branch.ljust(branch_len)} of ' +
                     f'{repo.ljust(repo_len)} will be cloned from {url.ljust(url_len)}')
 
@@ -196,7 +219,8 @@ def clone_jedi(logger, clone_config):
 
     # Do the cloning
     # --------------
-    for repo, url, branch, is_tag in zip(repo_list, url_list, branch_list, is_tag_list):
+    for repo, url, branch, is_tag, is_commit in zip(repo_list, url_list, branch_list,
+                                                    is_tag_list, is_commit_list):
 
         # Special treatment for jedicmake since it is typically part of spack.
         if repo == 'jedicmake':
@@ -204,7 +228,8 @@ def clone_jedi(logger, clone_config):
                         f'If it\'s not a module it will be cloned at configure time.')
         else:
             logger.info(f'Cloning \'{repo}\'.')
-            clone_git_repo(logger, url, branch, os.path.join(path_to_source, repo), is_tag)
+            clone_git_repo(logger, url, branch,
+                           os.path.join(path_to_source, repo), is_tag, is_commit)
 
     # Create CMakeLists.txt file
     # --------------------------
@@ -221,18 +246,13 @@ def clone_jedi(logger, clone_config):
     url_len = len(max(url_list, key=len))+2  # Plus 2 because of the quotes
     branch_len = len(max(branch_list, key=len))
 
-    # Remove file if it exists
-    if os.path.exists(output_file):
-        os.remove(output_file)
-
-    with open(output_file, 'a') as output_file_open:
+    with open(output_file, 'w') as output_file_open:
         for cmake_header_line in cmake_header_lines:
             output_file_open.write(cmake_header_line + '\n')
 
-        for repo, url, branch, cmake, recursive, is_tag in zip(repo_list, url_list, branch_list,
-                                                               cmakelists_list, recursive_list,
-                                                               is_tag_list):
-
+        for repo, url, branch, cmake, recursive, \
+            is_tag, is_commit in zip(repo_list, url_list, branch_list, cmakelists_list,
+                                     recursive_list, is_tag_list, is_commit_list):
             urlq = f'\"{url}\"'
 
             # Default cloning options
@@ -243,6 +263,11 @@ def clone_jedi(logger, clone_config):
             # If cloning a tag then turn off update and specify tag
             if is_tag:
                 branch_or_tag = 'TAG'
+                update = ''
+
+            # if commit, proceed as you would with branch but turn off update
+            if is_commit:
+                branch_or_tag = 'BRANCH'
                 update = ''
 
             # Add recursive if needed

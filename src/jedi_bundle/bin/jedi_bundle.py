@@ -74,6 +74,8 @@ def execute_tasks(tasks, config_dict):
 
     # Run the build stages
     if 'all' in tasks or 'clone' in tasks:
+        if 'pinned_versions' in config_dict:
+            clone_dict['pinned_versions'] = config_dict['pinned_versions']
         clone_jedi(logger, clone_dict)
     if 'all' in tasks or 'configure' in tasks:
         configure_jedi(logger, configure_dict)
@@ -105,6 +107,8 @@ def jedi_bundle():
                              '  jedi_bundle all build.yaml              (All tasks) \n' +
                              '  jedi_bundle Clone build.yaml            (Clone task) \n'
                              '  jedi_bundle Clone Configure build.yaml  (Clone & Configure task)\n')
+    parser.add_argument('--pinned_versions', '-pv', action='store_true',
+                        help='Invoke flag to use pinned versions instead of defaults')
 
     # Write the welcome message
     write_welcome_message()
@@ -115,6 +119,7 @@ def jedi_bundle():
     # Parse input string
     args = parser.parse_args()
     tasks_and_config = args.tasks_and_config
+    pinned_versions = args.pinned_versions
 
     # If there are no arguments create build.yaml and exit
     if tasks_and_config == []:
@@ -152,6 +157,12 @@ def jedi_bundle():
         build_dir = build_dir + '-' + cmake_build_type
 
         internal_config_dict['configure_options']['path_to_build'] = build_dir
+
+        # Add pinned_versions to build config if applicable
+        if pinned_versions:
+            pinned_config_file = os.path.join(return_config_path(), 'pinned_versions.yaml')
+            pinned_versions_dict = load_yaml(logger, pinned_config_file)
+            internal_config_dict['pinned_versions'] = pinned_versions_dict
 
         # Set path to new file and remove if existing
         config_file = os.path.join(os.getcwd(), 'build.yaml')
