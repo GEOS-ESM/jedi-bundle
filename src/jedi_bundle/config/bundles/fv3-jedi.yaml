@@ -11,7 +11,7 @@ required_repos:
   - crtm
   - ufo
   - vader
-  - fms
+  - jedi-bundle
   - fv3
   - fv3-jedi-lm
   - femps
