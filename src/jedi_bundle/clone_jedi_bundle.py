@@ -10,8 +10,8 @@
 
 
 import copy
-import re
 import os
+import re
 
 from jedi_bundle.config.config import return_config_path
 from jedi_bundle.utils.config import config_get
@@ -295,6 +295,9 @@ def clone_jedi(logger, clone_config):
                     output_file_open.write(jedi_cmake_line + '\n')
 
             else:
+                # Add include(fv3-interface.cmake) line if repo is fv3
+                if repo == 'fv3':
+                    output_file_open.write(' include(jedi-bundle/fv3-interface.cmake )\n')
 
                 output_file_open.write(package_line + '\n')
                 if cmake != '':
