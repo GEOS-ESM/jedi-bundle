@@ -298,6 +298,8 @@ def clone_jedi(logger, clone_config):
                 # Add include(fv3-interface.cmake) line if repo is fv3
                 if repo == 'fv3':
                     output_file_open.write(' include(jedi-bundle/fv3-interface.cmake )\n')
+                    output_file_open.write(f' list( APPEND CMAKE_BUILD_RPATH '
+                                           '${CMAKE_CURRENT_BINARY_DIR}/fv3 )\n')
 
                 output_file_open.write(package_line + '\n')
                 if cmake != '':
