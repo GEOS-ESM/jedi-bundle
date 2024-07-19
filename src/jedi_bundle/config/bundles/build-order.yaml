@@ -10,6 +10,10 @@
 - oops:
     default_branch: develop
 
+# Variable changes
+- vader:
+    default_branch: develop
+
 # Background error models
 - gsibec:
     repo_url_name: GSIbec
@@ -45,9 +49,6 @@
 - ufo:
     default_branch: develop
 
-# Variable changes
-- vader:
-    default_branch: develop
 
 # Soca
 - icepack:
