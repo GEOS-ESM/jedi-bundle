@@ -234,6 +234,9 @@ def clone_jedi(logger, clone_config):
                                                        False, False)
 
             clone_git_file(logger, url, ['fv3-interface.cmake'], path_to_source, depth=1)
+            logger.info('Cloning fv3.')
+            clone_git_repo(logger, url, branch,
+                           os.path.join(path_to_source, repo), is_tag, is_commit)
         else:
             logger.info(f'Cloning \'{repo}\'.')
             clone_git_repo(logger, url, branch,
