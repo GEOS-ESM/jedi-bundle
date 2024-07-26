@@ -53,6 +53,8 @@ setuptools.setup(
     entry_points={
         'console_scripts': [
             'jedi_bundle = jedi_bundle.bin.jedi_bundle:jedi_bundle',
+            'jedi_bundle_update_hash = \
+                 jedi_bundle.bin.jedi_bundle_update_hash:jedi_bundle_update_hash'
         ],
     },
     )

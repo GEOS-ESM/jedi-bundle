@@ -1,3 +1,45 @@
+- jedicmake:
+    branch: 40d521f9a2d796fcbc6234d77abceeffefb8eb7f
+    commit: true
+- oops:
+    branch: 78aaed70799a2e2a33175f132adb113d3c38720e
+    commit: true
+- gsibec:
+    branch: 606042920c33bcb89e408e918e7bdcfd95537c9f
+    commit: true
+- saber:
+    branch: a4caa3a676d49278b271a43d2993265026ad0afb
+    commit: true
+- ioda:
+    branch: 27d0b0c8e541d1ba759b5a576e934e8f3a350d46
+    commit: true
+- crtm:
+    branch: 8783a51222ad20a48c4251406e236d6032535543
+    commit: true
 - ufo:
-    branch: 64655cf61a9d22c88c0f20e740554ca5225790bc
-    commit: True
+    branch: 130c1848de9f03b145b3ba303dc308ff8b90dd11
+    commit: true
+- vader:
+    branch: 469bc0446472e7703fab46c72b5710a8bac17456
+    commit: true
+- jedi-bundle:
+    branch: e2343e59cfd85f27935122bdfcc8e618d9be01e4
+    commit: true
+- fv3:
+    branch: 0dd21f5426b602a698f5dfd73b44da3a62c81fe4
+    commit: true
+- fv3-jedi-lm:
+    branch: af67095ee87ffb472218aa386e34c6bfe64ca424
+    commit: true
+- femps:
+    branch: 4f12677d345e683bf910b5f76f0df120ad27482d
+    commit: true
+- fv3-jedi:
+    branch: 46f172dfeb9aacb1b4c14a91fb149f22b41f3343
+    commit: true
+- ioda-data:
+    branch: da8c9fe55a88b37d36bc1c43e7fb05a1742cb39f
+    commit: true
+- fv3-jedi-data:
+    branch: 3d318b4778188e919a5ba87d6c78148af2cedc33
+    commit: true
