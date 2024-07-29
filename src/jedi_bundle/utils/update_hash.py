@@ -87,6 +87,5 @@ def update_hash(logger: Logger, date: dt) -> None:
                 logger.info(f'{name}/{default_branch}, date: {curr_date}, hash: {updated_commit}')
 
     # Update pinned_versions.yaml
-    print(path_to_pinned_versions)
     with open(path_to_pinned_versions, 'w') as out:
         yaml.dump(pinned_versions, out)
