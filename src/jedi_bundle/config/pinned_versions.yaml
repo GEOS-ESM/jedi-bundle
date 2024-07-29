@@ -1,45 +1,62 @@
+# Saved pinned versions from 2024-7-28
+# Updated pinned versions will be found in JediOpt/core
 - jedicmake:
     branch: 40d521f9a2d796fcbc6234d77abceeffefb8eb7f
     commit: true
 - oops:
-    branch: 78aaed70799a2e2a33175f132adb113d3c38720e
-    commit: true
-- gsibec:
-    branch: 606042920c33bcb89e408e918e7bdcfd95537c9f
+    branch: e6485c0a659103f0daa2b7e2cece39a15bfb0d60
     commit: true
 - saber:
-    branch: a4caa3a676d49278b271a43d2993265026ad0afb
+    branch: 1c0a24d96b9c4560d53d689078487c68a34e8037
     commit: true
 - ioda:
-    branch: 27d0b0c8e541d1ba759b5a576e934e8f3a350d46
-    commit: true
-- crtm:
-    branch: 8783a51222ad20a48c4251406e236d6032535543
+    branch: c7b8760fc187a9eafb72a466d16fdee284912377
     commit: true
 - ufo:
-    branch: 130c1848de9f03b145b3ba303dc308ff8b90dd11
+    branch: cd66505007b1559d79cb158bd6dc018a3943c1e7
     commit: true
 - vader:
-    branch: 469bc0446472e7703fab46c72b5710a8bac17456
+    branch: 36dac46ac170ef8f80c2f147d0a8db7bfd9aba3c
     commit: true
 - jedi-bundle:
-    branch: e2343e59cfd85f27935122bdfcc8e618d9be01e4
+    branch: ec768119e250e7156c4f3a63e5a4fadc0441efee
     commit: true
 - fv3:
-    branch: 0dd21f5426b602a698f5dfd73b44da3a62c81fe4
+    branch: ab25dc09d955271f34ca6a3fa83af1093c85d9f7
     commit: true
 - fv3-jedi-lm:
-    branch: af67095ee87ffb472218aa386e34c6bfe64ca424
+    branch: a6e97d76ed7c0b2a27cf97512893a93d7e2b44bc
     commit: true
 - femps:
     branch: 4f12677d345e683bf910b5f76f0df120ad27482d
     commit: true
 - fv3-jedi:
-    branch: 46f172dfeb9aacb1b4c14a91fb149f22b41f3343
+    branch: d3c800b82eef8d1eaadcbc07c3cf7a96d8425233
     commit: true
 - ioda-data:
-    branch: da8c9fe55a88b37d36bc1c43e7fb05a1742cb39f
+    branch: a8c2bb3265ee2ab222706d606d22282630810750
     commit: true
 - fv3-jedi-data:
-    branch: 3d318b4778188e919a5ba87d6c78148af2cedc33
+    branch: dd0524e339250c0b80858812f2d85cceedbf07ee
+    commit: true
+- soca:
+    branch: 92519ab72b89a4c3b802501e71b7b66349fc8cc8
+    commit: true
+- iodaconv:
+    branch: 8ae8581f72d9a50cd9f589e1a858b0c562e2da52
+    commit: true
+- gsw:
+    branch: 697cbeb7605d70ed3857664c5f54a5c05346e31f
+    commit: true
+- ufo-data:
+    branch: 70464f6da0c306828d820004375d151c33c7c53d
+    commit: true
+- icepack:
+    branch: 73136ee8dcdbe378821e540488a5980a03d8abe6
+    commit: true
+- fms:
+    branch: 1f739141ef8b000a0bd75ae8bebfadea340299ba
+    commit: true
+- mom6:
+    branch: 51ec489ad7d8a86762bef4c46eabd9af5fc41fa4
     commit: true

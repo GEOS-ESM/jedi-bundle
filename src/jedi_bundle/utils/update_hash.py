@@ -12,50 +12,57 @@ def update_hash(logger: Logger, date: dt) -> None:
 
     # Load pinned versions for repo list
     path_to_pinned_versions = os.path.join(return_config_path(), 'pinned_versions.yaml')
-    pinned_versions = load_yaml(logger, 'pinned_versions.yaml')
+    pinned_versions = load_yaml(logger, path_to_pinned_versions)
 
-    # Load build order from jedi_bundle for repo aliases
-    aliases = load_yaml(logger, os.path.join(return_config_path(), 'bundles', 'build-order.yaml'))
+    # Load build order from jedi_bundle for repo aliases and default branches
+    repo_info = load_yaml(logger, os.path.join(return_config_path(), 'bundles', 'build-order.yaml'))
 
     # Get git credentials ready
     _, token = get_github_username_token(logger)
-
+    auth_header = {'Authorization': f'token {token}'}
     urls = [f'https://api.github.com/repos/jcsda-internal/',
             f'https://api.github.com/repos/geos-esm/',
             f'https://api.github.com/repos/jcsda/']
+    commit_history_length = 50
 
     # Update each repo commit hash if applicable
     for i in range(len(pinned_versions)):
         repo_alias = ''
         repo_dict = pinned_versions[i]
-        repo_name = list(repo_dict.keys())[0]
-
-        # convert name to repo alias if needed
-        for j in range(len(aliases)):
-            if repo_name in aliases[j]:
-                if 'repo_url_name' in aliases[j][repo_name]:
-                    repo_alias = aliases[j][repo_name]['repo_url_name']
-                    break
+        repo_name = next(iter(repo_dict))
 
         if 'commit' in repo_dict[repo_name]:
             if repo_dict[repo_name]['commit']:
 
-                auth_header = {
-                    'Authorization': f'token {token}',
-                }
+                # Convert name to repo alias if needed, set default branch
+                for repo_info_dict in repo_info:
+                    if repo_name in repo_info_dict:
+                        if 'repo_url_name' in repo_info_dict[repo_name]:
+                            repo_alias = repo_info_dict[repo_name]['repo_url_name']
+                        default_branch = repo_info_dict[repo_name]['default_branch']
+                        break
 
+                # Find commit history for default branch
                 for url in urls:
-                    if repo_alias:
-                        url += f'{repo_alias}/commits'
+                    name = f'{repo_alias if repo_alias else repo_name}'
+                    branch_url = url + f'{name}/branches/{default_branch}'
+                    response = requests.get(branch_url, headers=auth_header)
+                    data = response.json()
+                    if 'commit' in data:
+                        commit_pointer = data['commit']['sha']
                     else:
-                        url += f'{repo_name}/commits'
-                    response = requests.get(url, headers=auth_header)
+                        continue
+
+                    commit_history_url = url + f'{name}/commits?per_page=\
+                                                 {commit_history_length}&sha={commit_pointer}'
+                    response = requests.get(commit_history_url, headers=auth_header)
                     data = response.json()
                     if isinstance(data, list):
                         break
 
                 if isinstance(data, dict):
-                    logger.abort(f'Failed to retrieve commit history for {repo_name} from {urls}')
+                    logger.abort(f'Failed to retrieve commit history for \
+                                   {name}/{default_branch} from {urls}')
 
                 # Perform search to find first commit earlier than date provided
                 left, right = 0, len(data) - 1
@@ -77,8 +84,9 @@ def update_hash(logger: Logger, date: dt) -> None:
                 # Update repo dict with new commit hash
                 updated_commit = data[left]['sha']
                 pinned_versions[i][repo_name]['branch'] = updated_commit
-                logger.info(f'{repo_name}, date: {curr_date}, hash: {updated_commit}')
+                logger.info(f'{name}/{default_branch}, date: {curr_date}, hash: {updated_commit}')
 
     # Update pinned_versions.yaml
+    print(path_to_pinned_versions)
     with open(path_to_pinned_versions, 'w') as out:
         yaml.dump(pinned_versions, out)
