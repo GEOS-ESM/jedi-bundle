@@ -11,6 +11,9 @@
     default_branch: develop
 
 # Variable changes
+- gsw:
+    repo_url_name: GSW-Fortran
+    default_branch: develop
 - vader:
     default_branch: develop
 
@@ -31,9 +34,6 @@
     repo_url_name: ioda-converters
     default_branch: develop
 - geos-aero:
-    default_branch: develop
-- gsw:
-    repo_url_name: GSW-Fortran
     default_branch: develop
 - ropp-ufo:
     default_branch: develop
