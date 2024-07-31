@@ -61,8 +61,8 @@ def update_hash(logger: Logger, date: dt) -> None:
                         break
 
                 if isinstance(data, dict):
-                    logger.abort(f'Failed to retrieve commit history for \
-                                   {name}/{default_branch} from {urls}')
+                    logger.abort('Failed to retrieve commit history for '
+                                 f'{name}/{default_branch} from {urls}')
 
                 # Perform search to find first commit earlier than date provided
                 left, right = 0, len(data) - 1

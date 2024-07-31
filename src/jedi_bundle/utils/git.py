@@ -184,7 +184,7 @@ def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
 
         if is_commit:
 
-            git_clone_cmd = ['git', 'clone', url, target]
+            git_clone_cmd = ['git', 'clone', '--recursive', url, target]
             subprocess_run(logger, git_clone_cmd, True)
             git_checkout_cmd = ['git', 'checkout', branch]
             subprocess_run(logger, git_checkout_cmd, True, cwd=target)

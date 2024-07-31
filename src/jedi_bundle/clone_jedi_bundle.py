@@ -229,10 +229,8 @@ def clone_jedi(logger, clone_config):
         elif repo == 'fv3':
             logger.info('Cloning fv3-interface.cmake from the jedi-bundle repo for fv3')
             found, url_tmp, branch_tmp, \
-                is_tag, is_commit = get_url_and_branch(logger, github_orgs, 'jedi-bundle',
-                                                       default_branch, user_branch,
-                                                       False, False)
-
+                _, _ = get_url_and_branch(logger, github_orgs, 'jedi-bundle',
+                                          'develop', user_branch, False, False)
             clone_git_file(logger, url_tmp, ['fv3-interface.cmake'], path_to_source, depth=1)
             logger.info('Cloning fv3.')
             clone_git_repo(logger, url, branch,
