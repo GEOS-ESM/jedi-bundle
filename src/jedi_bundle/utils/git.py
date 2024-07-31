@@ -147,6 +147,35 @@ def get_url_and_branch(logger, github_orgs, repo_url_name, default_branch,
 
 # --------------------------------------------------------------------------------------------------
 
+def clone_git_file(
+    logger: Logger,
+    url: str,
+    files: list,
+    src_dir: str,
+    depth: int = 1,
+) -> None:
+
+    target = os.path.join(src_dir, 'tmp_bundle')
+    if os.path.exists(target):
+        subprocess_run(logger, ["rm", "-rf", target], cwd=src_dir)
+
+    # Clone the temporary repository
+    # Depth allows for shallow cloning and saves time and space!
+    subprocess_run(logger, ["git", "clone",
+                            "--depth", str(depth),
+                            url,
+                            target])
+
+    # Copy the file(s)
+    for file in files:
+        git_file = os.path.join(target, file)
+        subprocess_run(logger, ["cp", git_file, src_dir])
+
+    # Remove the temporary directory
+    subprocess_run(logger, ["rm", "-rf", target], cwd=src_dir)
+
+
+# --------------------------------------------------------------------------------------------------
 
 def clone_git_repo(logger, url, branch, target, is_tag, is_commit):
 
