@@ -1,5 +1,4 @@
-# Saved pinned versions from 2024-7-30
-# Updated pinned versions will be found in core directory
+# Pinned versions for 2024-07-30
 - jedicmake:
     branch: 40d521f9a2d796fcbc6234d77abceeffefb8eb7f
     commit: true
@@ -7,7 +6,7 @@
     branch: e6485c0a659103f0daa2b7e2cece39a15bfb0d60
     commit: true
 - saber:
-    branch: 1c0a24d96b9c4560d53d689078487c68a34e8037
+    branch: e93b14ff97acc70cdbb6bdd57620da2cc81c5eb0
     commit: true
 - ioda:
     branch: c7b8760fc187a9eafb72a466d16fdee284912377
@@ -40,7 +39,7 @@
     branch: 92519ab72b89a4c3b802501e71b7b66349fc8cc8
     commit: true
 - iodaconv:
-    branch: 8ae8581f72d9a50cd9f589e1a858b0c562e2da52
+    branch: e8235068c663029b1f2cb4abf4e86f476c2e6af0
     commit: true
 - gsw:
     branch: 697cbeb7605d70ed3857664c5f54a5c05346e31f

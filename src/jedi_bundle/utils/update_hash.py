@@ -89,3 +89,5 @@ def update_hash(logger: Logger, date: dt) -> None:
     # Update pinned_versions.yaml
     with open(path_to_pinned_versions, 'w') as out:
         yaml.dump(pinned_versions, out)
+
+    logger.info(f'pinned_versions.yaml updated at {path_to_pinned_versions}')
