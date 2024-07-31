@@ -11,7 +11,5 @@ required_repos:
   - vader
   - ufo
   - vader
-  - fms
-  - mom6
   - soca
   - ioda-data

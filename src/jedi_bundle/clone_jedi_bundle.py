@@ -10,13 +10,13 @@
 
 
 import copy
-import re
 import os
+import re
 
 from jedi_bundle.config.config import return_config_path
 from jedi_bundle.utils.config import config_get
 from jedi_bundle.utils.file_system import check_for_executable
-from jedi_bundle.utils.git import get_url_and_branch, clone_git_repo
+from jedi_bundle.utils.git import get_url_and_branch, clone_git_repo, clone_git_file
 from jedi_bundle.utils.yaml import load_yaml
 
 
@@ -226,6 +226,17 @@ def clone_jedi(logger, clone_config):
         if repo == 'jedicmake':
             logger.info(f'Skipping explicit clone of \'{repo}\' since it\'s usually a module. ' +
                         f'If it\'s not a module it will be cloned at configure time.')
+        elif repo == 'fv3':
+            logger.info('Cloning fv3-interface.cmake from the jedi-bundle repo for fv3')
+            found, url_tmp, branch_tmp, \
+                is_tag, is_commit = get_url_and_branch(logger, github_orgs, 'jedi-bundle',
+                                                       default_branch, user_branch,
+                                                       False, False)
+
+            clone_git_file(logger, url_tmp, ['fv3-interface.cmake'], path_to_source, depth=1)
+            logger.info('Cloning fv3.')
+            clone_git_repo(logger, url, branch,
+                           os.path.join(path_to_source, repo), is_tag, is_commit)
         else:
             logger.info(f'Cloning \'{repo}\'.')
             clone_git_repo(logger, url, branch,
@@ -295,6 +306,11 @@ def clone_jedi(logger, clone_config):
                     output_file_open.write(jedi_cmake_line + '\n')
 
             else:
+                # Add include(fv3-interface.cmake) line if repo is fv3
+                if repo == 'fv3':
+                    output_file_open.write(' include(fv3-interface.cmake )\n')
+                    output_file_open.write(f' list( APPEND CMAKE_INSTALL_RPATH '
+                                           '${CMAKE_CURRENT_BINARY_DIR}/fv3 )\n')
 
                 output_file_open.write(package_line + '\n')
                 if cmake != '':

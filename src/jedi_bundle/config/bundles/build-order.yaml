@@ -10,6 +10,13 @@
 - oops:
     default_branch: develop
 
+# Variable changes
+- gsw:
+    repo_url_name: GSW-Fortran
+    default_branch: develop
+- vader:
+    default_branch: develop
+
 # Background error models
 - gsibec:
     repo_url_name: GSIbec
@@ -28,9 +35,6 @@
     default_branch: develop
 - geos-aero:
     default_branch: develop
-- gsw:
-    repo_url_name: GSW-Fortran
-    default_branch: develop
 - ropp-ufo:
     default_branch: develop
     repo_url_name: ropp-test
@@ -45,22 +49,11 @@
 - ufo:
     default_branch: develop
 
-# Variable changes
-- vader:
-    default_branch: develop
-
-# Soca and fv3
-- fms:
-    repo_url_name: FMS
-    default_branch: release-stable
 
 # Soca
 - icepack:
     repo_url_name: Icepack
     default_branch: feature/ecbuild-new
-- mom6:
-    repo_url_name: MOM6
-    default_branch: main-ecbuild
 - soca:
     default_branch: develop
 
@@ -76,4 +69,11 @@
 - fv3-jedi-data:
     default_branch: develop
 - fv3-jedi:
+    default_branch: develop
+- jedi-bundle:
+    default_branch: develop
+
+# Other external packages
+- da-utils:
+    repo_url_name: DA-utils
     default_branch: develop
