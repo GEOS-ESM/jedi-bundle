@@ -1,5 +1,5 @@
-# Saved pinned versions from 2024-7-28
-# Updated pinned versions will be found in JediOpt/core
+# Saved pinned versions from 2024-7-30
+# Updated pinned versions will be found in core directory
 - jedicmake:
     branch: 40d521f9a2d796fcbc6234d77abceeffefb8eb7f
     commit: true
@@ -18,9 +18,6 @@
 - vader:
     branch: 36dac46ac170ef8f80c2f147d0a8db7bfd9aba3c
     commit: true
-#- jedi-bundle:
-#    branch: ec768119e250e7156c4f3a63e5a4fadc0441efee
-#    commit: true
 - fv3:
     branch: ab25dc09d955271f34ca6a3fa83af1093c85d9f7
     commit: true
@@ -54,9 +51,3 @@
 - icepack:
     branch: 73136ee8dcdbe378821e540488a5980a03d8abe6
     commit: true
-#- fms:
-#    branch: 1f739141ef8b000a0bd75ae8bebfadea340299ba
-#    commit: true
-#- mom6:
-#    branch: 51ec489ad7d8a86762bef4c46eabd9af5fc41fa4
-#    commit: true
