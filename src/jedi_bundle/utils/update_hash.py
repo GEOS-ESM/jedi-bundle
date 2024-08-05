@@ -23,7 +23,6 @@ def update_hash(logger: Logger, date: dt) -> None:
     urls = [f'https://api.github.com/repos/jcsda-internal/',
             f'https://api.github.com/repos/geos-esm/',
             f'https://api.github.com/repos/jcsda/']
-    commit_history_length = 50
 
     # Update each repo commit hash if applicable
     for i in range(len(pinned_versions)):
@@ -53,9 +52,11 @@ def update_hash(logger: Logger, date: dt) -> None:
                     else:
                         continue
 
-                    commit_history_url = url + f'{name}/commits?per_page=\
-                                                 {commit_history_length}&sha={commit_pointer}'
-                    response = requests.get(commit_history_url, headers=auth_header)
+                    commit_history_url = url + f'{name}/commits'
+                    response = requests.get(commit_history_url, headers=auth_header, params={
+                        'sha': commit_pointer,
+                        'until': date.isoformat()
+                    })
                     data = response.json()
                     if isinstance(data, list):
                         break
@@ -64,26 +65,10 @@ def update_hash(logger: Logger, date: dt) -> None:
                     logger.abort('Failed to retrieve commit history for '
                                  f'{name}/{default_branch} from {urls}')
 
-                # Perform search to find first commit earlier than date provided
-                left, right = 0, len(data) - 1
-                while left < right:
-                    mid = (left + right) // 2
-                    curr_date = dt.strptime(data[mid]['commit']['author']['date'],
-                                            '%Y-%m-%dT%H:%M:%S%z')
-                    if curr_date < date:
-                        right = mid
-                    else:
-                        left = mid + 1
-
-                # Throw error if commit previous to given date cannot be found
-                curr_date = dt.strptime(data[left]['commit']['author']['date'],
-                                        '%Y-%m-%dT%H:%M:%S%z')
-                if curr_date > date:
-                    logger.abort(f'Unable to find commit with date before {date}')
-
                 # Update repo dict with new commit hash
-                updated_commit = data[left]['sha']
+                updated_commit = data[0]['sha']
                 pinned_versions[i][repo_name]['branch'] = updated_commit
+                curr_date = data[0]['commit']['author']['date']
                 logger.info(f'{name}/{default_branch}, date: {curr_date}, hash: {updated_commit}')
 
     # Update pinned_versions.yaml

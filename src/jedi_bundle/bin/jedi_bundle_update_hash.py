@@ -9,7 +9,7 @@
 # --------------------------------------------------------------------------------------------------
 
 import argparse
-from datetime import datetime as dt
+from datetime import datetime, date, time, timezone
 from jedi_bundle.utils.logger import Logger
 from jedi_bundle.utils.update_hash import update_hash
 
@@ -23,12 +23,12 @@ def jedi_bundle_update_hash():
 
     logger = Logger('JediBundleUpdateHash')
     args = parser.parse_args()
-    date = args.date
+    input_date = args.date
 
     # Convert date to datetime object
-    dt_object = dt.strptime(date, '%Y-%m-%d').astimezone()
+    dt_object = datetime.combine(date.fromisoformat(input_date), time(0, 0, tzinfo=timezone.utc))
 
     # Call update hashes
     update_hash(logger, dt_object)
 
-    logger.info(f'Updated pinned_versions.yaml to latest commits before {date}')
+    logger.info(f'Updated pinned_versions.yaml to latest commits before {input_date}')

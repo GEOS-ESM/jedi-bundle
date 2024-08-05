@@ -70,8 +70,6 @@
     default_branch: develop
 - fv3-jedi:
     default_branch: develop
-#- jedi-bundle:
-#    default_branch: develop
 
 # Other external packages
 - da-utils:
