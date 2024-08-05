@@ -65,7 +65,28 @@ or, you can use option
 jedi_bundle -pv
 ```
 
-After running `jedi_bundle` with the pinned versions option, you will see a list of pinned versions in the auto-generated `build.yaml` file. Then, you can run `clone`, `configure`, `make`, or `all` commands as normal.
+After running `jedi_bundle` with the pinned versions option, you will see a list of `pinned versions` in the auto-generated `build.yaml` file appended at the end, as such:
+
+```yaml
+# build.yaml
+# Previous sections remain the same
+pinned_versions:
+- jedicmake:
+    branch: 40d521f9a2d796fcbc6234d77abceeffefb8eb7f
+    commit: true
+- oops:
+    branch: e6485c0a659103f0daa2b7e2cece39a15bfb0d60
+    commit: true
+- saber:
+    branch: e93b14ff97acc70cdbb6bdd57620da2cc81c5eb0
+    commit: true
+- ioda:
+    branch: c7b8760fc187a9eafb72a466d16fdee284912377
+    commit: true
+
+```
+
+Then, you can run `clone`, `configure`, `make`, or `all` commands as normal.
 
 
 ### Updating the Commit Hashes
