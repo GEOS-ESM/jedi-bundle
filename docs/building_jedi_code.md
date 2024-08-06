@@ -51,3 +51,50 @@ To run **Clone** and **Configure**:
 jedi_bundle clone configure build.yaml
 ```
 
+## Using Pinned Versions of JEDI Repositories
+
+Running `jedi_bundle` will pull the latest commits from each JEDI repository's default branch. Since some JEDI repositories change frequently, we may want to work with a fixed set of commit hashes so that internal development is insulated from these continuous updates. A set of stable commit hashes for the JEDI repositories can be found in `src/jedi_bundle/config/pinned_versions.yaml`. These versions will be updated periodically by the Swell team. To build JEDI with these pinned versions, run the `jedi_bundle` command with the pinned versions flag:
+
+``` shell
+jedi_bundle --pinned_versions
+```
+
+or, you can use option
+
+``` shell
+jedi_bundle -pv
+```
+
+After running `jedi_bundle` with the pinned versions option, you will see a list of `pinned versions` in the auto-generated `build.yaml` file appended at the end, as such:
+
+```yaml
+# build.yaml
+# Previous sections remain the same
+pinned_versions:
+- jedicmake:
+    branch: 40d521f9a2d796fcbc6234d77abceeffefb8eb7f
+    commit: true
+- oops:
+    branch: e6485c0a659103f0daa2b7e2cece39a15bfb0d60
+    commit: true
+- saber:
+    branch: e93b14ff97acc70cdbb6bdd57620da2cc81c5eb0
+    commit: true
+- ioda:
+    branch: c7b8760fc187a9eafb72a466d16fdee284912377
+    commit: true
+
+```
+
+Then, you can run `clone`, `configure`, `make`, or `all` commands as normal.
+
+
+### Updating the Commit Hashes
+
+If you would like to generate a set of commit hashes for a day other than what is in `src/jedi_bundle/config/pinned_versions.yaml`, you may do so by running the `jedi_bundle_update_hash` command with a date in the format YYYY-MM-DD:
+
+``` shell
+jedi_bundle_update_hash 2024-05-14
+```
+
+This will update the `pinned_versions.yaml` file in your `jedi_bundle` build with commit hashes that are the latest before the provided date. Then, you can run `jedi_bundle -pv` to see the updated hashes in the `build.yaml` file. 
