@@ -15,7 +15,8 @@
 
 - Platform Specific Instructions
 
-  - [Building JEDI code on Discover](building_jedi_code_on_discover.md)
+  - [Building JEDI code on Discover (SLES12)](_platforms/building_jedi_code_on_discover_sles12.md)
+  - [Building JEDI code on Discover (SLES15)](_platforms/building_jedi_code_on_discover_sles15.md)
 
 - Miscellaneous
 

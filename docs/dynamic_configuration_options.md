@@ -20,11 +20,12 @@ clone_options:
     - vader
 
 configure_options:
+  cmake_build_type: release
+  custom_configure_options: ''
+  external_modules: false
   platform: 'none'
   modules: 'none'
-  cmake_build_type: release
   path_to_build: jedi_bundle/build
-  custom_configure_options: ''
 
 make_options:
   cores_to_use_for_make: 6
@@ -42,11 +43,12 @@ make_options:
 
 | YAML Key                  | Description |
 | ------------------------- | ----------- |
-| `platform`                | The compute platform to use. E.g. Discover or Orion. Each supported platform has a corresponding configuration files in the `src/config/platforms/` directory. Can be kept as `none` if for example working on a closed system that does not use modules.      |
-| `modules`                 | Type of modules to use. These are specific to the platform choice and the directives for loading the modules are specified in the `src/config/platforms/platform.yaml` file. The `platform` and `modules` directive work together.       |
 | `cmake_build_type`        | The `CMAKE_BUILD_TYPE` to use, e.g. release, debug etc. |
-| `path_to_build`           | Path where the build directory will be located. |
 | `custom_configure_options`| User provided options to pass to ecbuild. E.g. `"-DMYOPTION=1"`. This can be useful if not using `platform` and `modules`. |
+| `external_modules`| Bool option to create a `modules` and `modules-init` files inside the `build` directory. Default behavoir, `false`, creates the these files using the `~/config/platform` specific directives from the `jedi_bundle` source folder. |
+| `modules`                 | Type of modules to use. These are specific to the platform choice and the directives for loading the modules are specified in the `src/config/platforms/platform.yaml` file. The `platform` and `modules` directive work together.       |
+| `path_to_build`           | Path where the build directory will be located. |
+| `platform`                | The compute platform to use. E.g. Discover or Orion. Each supported platform has a corresponding configuration files in the `src/config/platforms/` directory. Can be kept as `none` if for example working on a closed system that does not use modules.      |
 
 #### Make options
 
