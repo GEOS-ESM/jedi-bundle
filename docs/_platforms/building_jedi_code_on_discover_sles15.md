@@ -4,15 +4,7 @@
 
 ``` bash
 module purge
-module use /discover/swdev/jcsda/spack-stack/scu17/modulefiles
-module load ecflow/5.11.4
-
-module use /gpfsm/dswdev/jcsda/spack-stack/scu17/spack-stack-1.7.0/envs/ue-intel-2021.10.0/install/modulefiles/Core
-module load stack-intel/2021.10.0
-module load stack-intel-oneapi-mpi/2021.10.0
-module load stack-python/3.10.13
-module load git-lfs/3.4.0
-module load py-pip/23.1.2
+source /discover/nobackup/projects/gmao/advda/swell/jedi_modules/bundle-intel-sles15
 ```
 
 2) Load the SLES15 `jedi_bundle` module:
