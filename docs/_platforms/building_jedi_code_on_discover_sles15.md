@@ -1,6 +1,6 @@
 # Building JEDI code on Discover (SLES 15)
 
-1) Load the JEDI spack Python modules (These modules will load Python version 3.10):
+1) Load the JEDI spack Python modules (These modules will load Python version 3.11):
 
 ``` bash
 module purge
@@ -11,7 +11,7 @@ source /discover/nobackup/projects/gmao/advda/swell/jedi_modules/bundle-intel-sl
 
 ``` bash
 module use -a /discover/nobackup/projects/gmao/advda/JediOpt/modulefiles/core/
-module load jedi_bundle/sles15_skylab7
+module load jedi_bundle/sles15_skylab8
 ```
 
 3) Create a directory where the source code and build directory will be stored e.g.:
@@ -37,7 +37,7 @@ Once `build.yaml` is configured they way you wish, you can issue `jedi_bundle` a
 jedi_bundle clone configure build.yaml
 ```
 
-6) Then proceed building JEDI using a compute node. First, request interactive nodes with the following:
+6) Then proceed building JEDI using a compute node. First, request interactive nodes with the following (Note: 1 hour could be insufficient if Discover IO load is high. If that is the case simply request interactive nodes again and submit `make` command with the proper modules loaded):
 
 ``` bash
 salloc --time=1:00:00

@@ -31,7 +31,7 @@ jedi_bundle
 
 Before proceeding you may want to edit `build.yaml` to choose different options. It will default to building all bundles and you may wish to only build a specific bundle by modifying `clone_options.bundles`. Choosing `fv3-jedi` and `ufo`, for example, will result in building all the code for the `fv3-jedi` and `ufo` bundles. You may also want to change the modules used to build or change the type of build to use.
 
-Once `build.yaml` is configured they way you wish, you can issue `jedi_bundle` again with the tasks you want. 
+Once `build.yaml` is configured they way you wish, you can issue `jedi_bundle` again with the tasks you want.
 
 5) Clone & configure the JEDI repositories on a login node (clone & configure arguments can be issued seperately):
 
@@ -39,7 +39,7 @@ Once `build.yaml` is configured they way you wish, you can issue `jedi_bundle` a
 jedi_bundle clone configure build.yaml
 ```
 
-6) Then proceed building JEDI using a compute node. First, request interactive nodes with the following:
+6) Then proceed building JEDI using a compute node. First, request interactive nodes with the following (Note: 1 hour could be insufficient if Discover IO load is high. If that is the case simply request interactive nodes again and submit `make` command with the proper modules loaded):
 
 ``` bash
 salloc --time=1:00:00
