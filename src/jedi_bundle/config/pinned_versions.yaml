@@ -47,6 +47,3 @@
 - ufo-data:
     branch: 1a3008b44adbbe50926dd7915fdbb975233084d9
     commit: true
-- icepack:
-    branch: 73136ee8dcdbe378821e540488a5980a03d8abe6
-    commit: true
